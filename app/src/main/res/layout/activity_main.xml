@@ -24,6 +24,27 @@
             android:layout_height="wrap_content"
             android:text="@string/false_button"	/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/previous_button"
+            android:layout_width="60dp"
+
+            android:src="@drawable/ic_baseline_navigate_before_24"
+            android:layout_height="60dp"
+           	/>
+        <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="60dp"
+            android:layout_marginRight="4dp"
+             android:src="@drawable/ic_baseline_navigate_next_24"
+            android:layout_height="60dp"
+           	/>
+    </LinearLayout>
 
 
 

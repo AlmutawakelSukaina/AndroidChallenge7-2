@@ -11,4 +11,5 @@
     <string	name="question_africa">The\tsource\tof\tthe\tNile\tRiver\tis\tin\tEgypt.</string>
     <string	name="question_americas">The\tAmazon\tRiver\tis\tthe\tlongest\triver\tin\tthe\tAmericas.</string>
     <string	name="question_asia">Lake\tBaikal\tis\tthe\tworld\'s\toldest\tand\tdeepest\tfreshwater\tlake.</string>
+    <string name="previous_button">PREV</string>
 </resources>
