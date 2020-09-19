@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">AndroidQuestion2Third</string>
-    <string name="question_text">Canberra\tis\tthe\tcapital\tof\tAustralia</string>
+    <string name="question_australia">Canberra\tis\tthe\tcapital\tof\tAustralia</string>
     <string name="true_button">True</string>
     <string name="false_button">False</string>
     <string name="correct_toast">Correct!</string>
     <string name="incorrect_toast">Incorrect!</string>
+    <string name="next_button">Next</string>
+    <string	name="question_oceans">The\tPacific\tOcean\tis larger\tthan\tthe\tAtlantic\tOcean.</string>
+    <string	name="question_mideast">The\tSuez\tCanal\tconnects\tthe\tRed\tSea\tand\tthe\tIndian\tOcean.</string>
+    <string	name="question_africa">The\tsource\tof\tthe\tNile\tRiver\tis\tin\tEgypt.</string>
+    <string	name="question_americas">The\tAmazon\tRiver\tis\tthe\tlongest\triver\tin\tthe\tAmericas.</string>
+    <string	name="question_asia">Lake\tBaikal\tis\tthe\tworld\'s\toldest\tand\tdeepest\tfreshwater\tlake.</string>
 </resources>
