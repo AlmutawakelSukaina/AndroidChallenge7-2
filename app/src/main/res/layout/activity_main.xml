@@ -33,12 +33,14 @@
         <ImageButton
             android:id="@+id/previous_button"
             android:layout_width="60dp"
+            android:contentDescription="@string/previous_button"
 
             android:src="@drawable/ic_baseline_navigate_before_24"
             android:layout_height="60dp"
            	/>
         <ImageButton
             android:id="@+id/next_button"
+            android:contentDescription="@string/next_button"
             android:layout_width="60dp"
             android:layout_marginRight="4dp"
              android:src="@drawable/ic_baseline_navigate_next_24"
