@@ -1,15 +1,37 @@
 <resources>
     <string name="app_name">AndroidQuestion2Third</string>
-    <string name="question_australia">Canberra\tis\tthe\tcapital\tof\tAustralia</string>
+
     <string name="true_button">True</string>
     <string name="false_button">False</string>
     <string name="correct_toast">Correct!</string>
     <string name="incorrect_toast">Incorrect!</string>
     <string name="next_button">Next</string>
-    <string	name="question_oceans">The\tPacific\tOcean\tis larger\tthan\tthe\tAtlantic\tOcean.</string>
-    <string	name="question_mideast">The\tSuez\tCanal\tconnects\tthe\tRed\tSea\tand\tthe\tIndian\tOcean.</string>
-    <string	name="question_africa">The\tsource\tof\tthe\tNile\tRiver\tis\tin\tEgypt.</string>
-    <string	name="question_americas">The\tAmazon\tRiver\tis\tthe\tlongest\triver\tin\tthe\tAmericas.</string>
-    <string	name="question_asia">Lake\tBaikal\tis\tthe\tworld\'s\toldest\tand\tdeepest\tfreshwater\tlake.</string>
+    <string name="question_australia">Canberra\tis\tthe\tcapital\tof\tAustralia</string>
+    <string name="question_oceans">The\tPacific\tOcean\tis larger\tthan\tthe\tAtlantic\tOcean.</string>
+    <string name="question_mideast">The\tSuez\tCanal\tconnects\tthe\tRed\tSea\tand\tthe\tIndian\tOcean.</string>
+    <string name="question_africa">The\tsource\tof\tthe\tNile\tRiver\tis\tin\tEgypt.</string>
+    <string name="question_americas">The\tAmazon\tRiver\tis\tthe\tlongest\triver\tin\tthe\tAmericas.</string>
+    <string name="question_asia">Lake\tBaikal\tis\tthe\tworld\'s\toldest\tand\tdeepest\tfreshwater\tlake.</string>
+
+
+    <string name="question_M_reserve">Bara\'a reserve located in Aden.</string>
+    <string name="question_M_seas">Read sea is in Hoddidah.</string>
+    <string name="question_M_mountain">Adan mountain is in Taiz.</string>
+    <string name="question_M_island">Soqatra Island is near to Aden.</string>
+    <string name="question_M_waterFall">Bani Mater Water Fall is near to Sana\'a.</string>
+    <string name="question_M_city">Aden is in south of Yemen.</string>
+
+    <string name="question_E_Japan">Japan located in Africa.</string>
+    <string name="question_E_Turkey">Turkey is in Asia only.</string>
+    <string name="question_E_Europe">Romania overlooking black sea.</string>
+    <string name="question_E_Cairo">Cairo is the capital city of Sudan</string>
+    <string name="question_E_Istanbul">Istanbul located in Turkey</string>
+    <string name="questiom_E_Yemne">Taiz is the Capital city of Yemen</string>
+
     <string name="previous_button">PREV</string>
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+
 </resources>

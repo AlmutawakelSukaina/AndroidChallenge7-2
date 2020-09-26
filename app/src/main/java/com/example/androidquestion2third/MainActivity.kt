@@ -1,72 +1,80 @@
 package com.example.androidquestion2third
 
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.activity_main.*
 
+private const val REQUEST_CODE_CHEAT=0
+private val TAG = "MainActivity"
+private const val EXTRA_ANSWER_SHOWN="com.example.androidquestion2third.answer_shown"
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
-    private lateinit var falseButton: Button
+    private  lateinit var falseButton: Button
     private lateinit var nextButton: ImageButton
     private lateinit var previousButton: ImageButton
     private lateinit var questionTextView: TextView
-    private var AnswerBank= listOf(CheckAnsweredQuestions(0,false),
-        CheckAnsweredQuestions(1,false),
-        CheckAnsweredQuestions(2,false),
-        CheckAnsweredQuestions(3,false),
-        CheckAnsweredQuestions(4,false),
-        CheckAnsweredQuestions(5,false)
+    private lateinit var cheatButton:Button
+    private lateinit var resultTextView:TextView
 
-    )
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true)
-    )
-    private var currentIndex =0
-    private var  grade=0
-    private var numAnswer=0
+
+    private val quizViewModel:QuizViewModel by lazy {
+        ViewModelProviders.of(this).get(QuizViewModel::class.java)
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         previousButton=findViewById(R.id.previous_button)
         questionTextView = findViewById(R.id.question_text_view)
-
-
+        cheatButton=findViewById(R.id.cheat_button)
+        resultTextView=findViewById(R.id.result)
 
         trueButton.setOnClickListener {
 
-            AnswerBank[currentIndex].answered=true
+           quizViewModel.userEnterAnswer()
             checkAnswer(true)
             isAnswered()
 
 
+
         }
         falseButton.setOnClickListener {
-            AnswerBank[currentIndex].answered=true
-
-
+           quizViewModel.userEnterAnswer()
            checkAnswer(false)
             isAnswered()
 
+
         }
-        val questionTextResId = questionBank[currentIndex].textResId
+        val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
+        resultTextView.setText(quizViewModel.getGrade)
+        trueButton.isEnabled=!quizViewModel.isAnsweredQuestion
+        falseButton.isEnabled=!quizViewModel.isAnsweredQuestion
+        resultTextView.setText(quizViewModel.text+quizViewModel.getGrade)
 
         nextButton.setOnClickListener {
 
-            currentIndex = (currentIndex + 1) % questionBank.size
+            quizViewModel.moveToNext()
             updateQuestion()
             isAnswered()
 
@@ -74,66 +82,151 @@ class MainActivity : AppCompatActivity() {
 
         previousButton.setOnClickListener {
 
-            currentIndex = (currentIndex - 1) % questionBank.size
-            if(currentIndex<0)
-                currentIndex=questionBank.size-1
-
+           quizViewModel.moveToPrevious()
             updateQuestion()
             isAnswered()
 
         }
-    }
 
-    private fun isAnswered()
-    {
-        if( AnswerBank[currentIndex].answered==true)
-        {
-            trueButton.isEnabled=false
-            falseButton.isEnabled=false
+     cheatButton.setOnClickListener {
 
-        }
-        else
-        {
-            trueButton.isEnabled=true
-            falseButton.isEnabled=true
+         val answerIsTrue=quizViewModel.currentQuestionAnswer
+         val intent=Cheating.newIntent(this,answerIsTrue)
 
-        }
+         startActivityForResult(intent, REQUEST_CODE_CHEAT)
+         onActivityResult(REQUEST_CODE_CHEAT,Activity.RESULT_OK,intent)
+
+     }
 
 
     }
+
 
     private fun checkAnswer(userAnswer: Boolean) {
-         numAnswer++
 
 
-        val correctAnswer = questionBank[currentIndex].answer
-        val messageResId =
-            if (userAnswer == correctAnswer) {
-                R.string.correct_toast
-            } else {
-                R.string.incorrect_toast
-            }
-        if(messageResId==R.string.correct_toast)grade++
+        val correctAnswer = quizViewModel.currentQuestionAnswer
+        val messageResId =when{
+            quizViewModel.isCheater->R.string.judgment_toast
+            userAnswer == correctAnswer->R.string.correct_toast
+            else->R.string.incorrect_toast
 
+
+        }
+
+                var add=isCheater(messageResId)
+
+                quizViewModel.grade+=add
+
+
+
+            resultTextView.setText(quizViewModel.text+quizViewModel.getGrade)
             Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-          if(numAnswer==questionBank.size) {
+             quizViewModel.isCheater=false
+          if(quizViewModel.numberOfAnsweredQuestions==quizViewModel.size) {
 
+              var scorePercent =Math.round(((quizViewModel.getGrade.toFloat() / quizViewModel.size.toFloat()) * 100.0f)/4.0f);
 
-              val toast= Toast.makeText(this, "Your grade is " + grade, Toast.LENGTH_LONG)
+              val toast= Toast.makeText(this, "Your Final Score = ${quizViewModel.getGrade}"+"\n"+scorePercent+"%", Toast.LENGTH_LONG)
               toast.setGravity(Gravity.CENTER,0,0)
               toast.show()
+
           }
+
+      }
+
+     private fun isAnswered()
+    {
+             trueButton.isEnabled=!quizViewModel.isAnsweredQuestion
+            falseButton.isEnabled=!quizViewModel.isAnsweredQuestion
+
 
     }
 
 
-    private	fun	updateQuestion()	{
-        val	questionTextResId	=	questionBank[currentIndex].textResId
-        questionTextView.setText(questionTextResId)				}
+    private	fun	updateQuestion()
+    {
+        val	questionTextResId	=	quizViewModel.currentQuestionText
+        questionTextView.setText(questionTextResId)
+    }
 
 
 
-}
+     fun isCheater(message:Int):Int
+     {
+         var res=0
+         if(message!=R.string.judgment_toast&&message!=R.string.incorrect_toast)
+         { if(!quizViewModel.isCheater)
+              res = when{
+
+                 quizViewModel.kindOfQuestions=="easy"->2
+                 quizViewModel.kindOfQuestions=="Medium"->4
+                 else ->6
+
+
+             }}
+         return res
+
+     }
+
+
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode!=Activity.RESULT_OK){return}
+        if(requestCode== REQUEST_CODE_CHEAT)
+        {
+            quizViewModel.isCheater=data?.getBooleanExtra(EXTRA_ANSWER_SHOWN,false)?:false
+
+        }
+
+
+    }
+
+
+
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG ,"onStart() called "  + quizViewModel.currentIndex)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG ,"onPause() called "  +quizViewModel.currentIndex)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(TAG ,"onRestart() called " + quizViewModel.currentIndex )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG ,"onResume() called " + quizViewModel.currentIndex)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG ,"onStop() called "  + quizViewModel.currentIndex )
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG ,"onDestroy() called" )
+    }
+
+
+
+
+
+
+
+          }
 
 
 
