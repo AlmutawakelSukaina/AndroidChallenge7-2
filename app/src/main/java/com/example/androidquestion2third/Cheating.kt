@@ -3,6 +3,7 @@ package com.example.androidquestion2third
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -17,6 +18,7 @@ class Cheating : AppCompatActivity() {
 
     private lateinit var answerTextView: TextView
     private lateinit var showAnswerButton: Button
+    private lateinit var  apiLevel:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cheating)
@@ -24,6 +26,8 @@ class Cheating : AppCompatActivity() {
 
         answerTextView=findViewById(R.id.answer_TextView)
         showAnswerButton=findViewById(R.id.show_answer_button)
+        apiLevel=findViewById(R.id.API);
+        apiLevel.setText("API Level  "+Build.VERSION.SDK_INT);
 
         showAnswerButton.setOnClickListener {
 
