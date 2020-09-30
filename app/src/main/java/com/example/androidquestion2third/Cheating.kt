@@ -8,13 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+
 
 private const val EXTRA_ANSWER_IS_TRUE="com.example.androidquestion2third.answer_is_True"
 private const val EXTRA_ANSWER_SHOWN="com.example.androidquestion2third.answer_shown"
 
+
 class Cheating : AppCompatActivity() {
     private var answerIsTrue=false
+
 
     private lateinit var answerTextView: TextView
     private lateinit var showAnswerButton: Button
@@ -31,13 +33,18 @@ class Cheating : AppCompatActivity() {
 
         showAnswerButton.setOnClickListener {
 
+
             val answerText=when{
                answerIsTrue->R.string.true_button
                 else->R.string.false_button
 
             }
+
+
+
             answerTextView.setText(answerText)
             setAnswerShownResult(true)
+
         }
 
 
@@ -47,6 +54,7 @@ class Cheating : AppCompatActivity() {
 
     private fun setAnswerShownResult(isAnswerShown:Boolean)
     {
+
         val data=Intent().apply { putExtra(EXTRA_ANSWER_SHOWN,isAnswerShown) }
         setResult(Activity.RESULT_OK,data)
 
@@ -59,7 +67,8 @@ class Cheating : AppCompatActivity() {
         {
             return Intent(PackageContext,Cheating::class.java).apply {
 
-                putExtra(EXTRA_ANSWER_IS_TRUE,answerIsTrue)
+                putExtra(EXTRA_ANSWER_IS_TRUE,answerIsTrue);
+
 
             }
         }

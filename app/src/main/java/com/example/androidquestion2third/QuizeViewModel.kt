@@ -9,6 +9,8 @@ class QuizViewModel:ViewModel()
     var isCheater=false
     var grade=0
     var text="Your Current Score = "
+    var remainText=" Remain Token : "
+    var token=3
 
 
     private val easyQuestion= listOf(
@@ -71,6 +73,11 @@ class QuizViewModel:ViewModel()
     val getGrade:String
     get()=grade.toString()
 
+    val getToken:Int
+    get()=token
+
+    val getRemainTextView
+    get()=remainText
 
 
     fun moveToNext()
@@ -89,8 +96,10 @@ class QuizViewModel:ViewModel()
    fun userEnterAnswer()
    {
        numAnswer++
-
        answerBank[currentIndex].answered=true
+       if(isCheater)
+           token-=1
+
 
    }
 

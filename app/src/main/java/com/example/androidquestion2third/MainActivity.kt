@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
     private lateinit var cheatButton:Button
     private lateinit var resultTextView:TextView
+    private lateinit var cheatToken:TextView
 
 
     private val quizViewModel:QuizViewModel by lazy {
@@ -40,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
@@ -48,12 +48,14 @@ class MainActivity : AppCompatActivity() {
         questionTextView = findViewById(R.id.question_text_view)
         cheatButton=findViewById(R.id.cheat_button)
         resultTextView=findViewById(R.id.result)
+        cheatToken=findViewById(R.id.cheat_token)
 
         trueButton.setOnClickListener {
 
            quizViewModel.userEnterAnswer()
             checkAnswer(true)
             isAnswered()
+            tokenCheck()
 
 
 
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
            quizViewModel.userEnterAnswer()
            checkAnswer(false)
             isAnswered()
+            tokenCheck()
 
 
         }
@@ -71,6 +74,8 @@ class MainActivity : AppCompatActivity() {
         trueButton.isEnabled=!quizViewModel.isAnsweredQuestion
         falseButton.isEnabled=!quizViewModel.isAnsweredQuestion
         resultTextView.setText(quizViewModel.text+quizViewModel.getGrade)
+        cheatToken.setText(quizViewModel.getRemainTextView+quizViewModel.getToken)
+
 
         nextButton.setOnClickListener {
 
@@ -89,12 +94,16 @@ class MainActivity : AppCompatActivity() {
         }
 
      cheatButton.setOnClickListener {
-
          val answerIsTrue=quizViewModel.currentQuestionAnswer
          val intent=Cheating.newIntent(this,answerIsTrue)
 
          startActivityForResult(intent, REQUEST_CODE_CHEAT)
          onActivityResult(REQUEST_CODE_CHEAT,Activity.RESULT_OK,intent)
+
+
+       
+
+
 
      }
 
@@ -143,7 +152,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private  fun tokenCheck()
+    {
+        cheatToken.setText(quizViewModel.getRemainTextView+quizViewModel.getToken)
+       if(quizViewModel.getToken<1)
+       {
+           cheatButton.isEnabled=false
 
+       }
+
+    }
     private	fun	updateQuestion()
     {
         val	questionTextResId	=	quizViewModel.currentQuestionText
@@ -157,19 +175,19 @@ class MainActivity : AppCompatActivity() {
          var res=0
          if(message!=R.string.judgment_toast&&message!=R.string.incorrect_toast)
          { if(!quizViewModel.isCheater)
-              res = when{
+                res = when{
 
                  quizViewModel.kindOfQuestions=="easy"->2
                  quizViewModel.kindOfQuestions=="Medium"->4
                  else ->6
 
 
-             }}
+             }
+
+         }
          return res
 
      }
-
-
 
 
 
@@ -180,6 +198,8 @@ class MainActivity : AppCompatActivity() {
         if(requestCode== REQUEST_CODE_CHEAT)
         {
             quizViewModel.isCheater=data?.getBooleanExtra(EXTRA_ANSWER_SHOWN,false)?:false
+
+
 
         }
 
