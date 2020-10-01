@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProviders
 
 
 private const val EXTRA_ANSWER_IS_TRUE="com.example.androidquestion2third.answer_is_True"
@@ -21,6 +22,8 @@ class Cheating : AppCompatActivity() {
     private lateinit var answerTextView: TextView
     private lateinit var showAnswerButton: Button
     private lateinit var  apiLevel:TextView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cheating)
@@ -30,6 +33,7 @@ class Cheating : AppCompatActivity() {
         showAnswerButton=findViewById(R.id.show_answer_button)
         apiLevel=findViewById(R.id.API);
         apiLevel.setText("API Level  "+Build.VERSION.SDK_INT);
+
 
         showAnswerButton.setOnClickListener {
 

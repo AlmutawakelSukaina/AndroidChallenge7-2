@@ -1,8 +1,11 @@
 package com.example.androidquestion2third
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -12,6 +15,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,7 +61,7 @@ class MainActivity : AppCompatActivity() {
            quizViewModel.userEnterAnswer()
             checkAnswer(true)
             isAnswered()
-            tokenCheck()
+//            tokenCheck()
 
 
 
@@ -64,11 +70,12 @@ class MainActivity : AppCompatActivity() {
            quizViewModel.userEnterAnswer()
            checkAnswer(false)
             isAnswered()
-            tokenCheck()
+//            tokenCheck()
 
 
         }
         val questionTextResId = quizViewModel.currentQuestionText
+
         questionTextView.setText(questionTextResId)
         resultTextView.setText(quizViewModel.getGrade)
         trueButton.isEnabled=!quizViewModel.isAnsweredQuestion
@@ -93,11 +100,20 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-     cheatButton.setOnClickListener {
+     cheatButton.setOnClickListener {view ->
          val answerIsTrue=quizViewModel.currentQuestionAnswer
          val intent=Cheating.newIntent(this,answerIsTrue)
-
-         startActivityForResult(intent, REQUEST_CODE_CHEAT)
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+             val options = ActivityOptions.makeClipRevealAnimation(
+                 view, 0, 0,
+                 view.width, view.height
+             )
+             startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
+         }
+         else
+           {
+             startActivityForResult(intent, REQUEST_CODE_CHEAT)
+           }
          onActivityResult(REQUEST_CODE_CHEAT,Activity.RESULT_OK,intent)
 
 
@@ -150,18 +166,9 @@ class MainActivity : AppCompatActivity() {
             falseButton.isEnabled=!quizViewModel.isAnsweredQuestion
 
 
-    }
-
-    private  fun tokenCheck()
-    {
-        cheatToken.setText(quizViewModel.getRemainTextView+quizViewModel.getToken)
-       if(quizViewModel.getToken<1)
-       {
-           cheatButton.isEnabled=false
-
-       }
 
     }
+
     private	fun	updateQuestion()
     {
         val	questionTextResId	=	quizViewModel.currentQuestionText
@@ -198,7 +205,15 @@ class MainActivity : AppCompatActivity() {
         if(requestCode== REQUEST_CODE_CHEAT)
         {
             quizViewModel.isCheater=data?.getBooleanExtra(EXTRA_ANSWER_SHOWN,false)?:false
+            if(quizViewModel.getToken<=1&&quizViewModel.isCheater)
+           {
+               quizViewModel.token-=1
+           cheatButton.isEnabled=false
 
+           }
+            else if( quizViewModel.isCheater&&quizViewModel.getToken>=1)
+             quizViewModel.token-=1
+            cheatToken.setText(quizViewModel.getRemainTextView+quizViewModel.getToken)
 
 
         }
