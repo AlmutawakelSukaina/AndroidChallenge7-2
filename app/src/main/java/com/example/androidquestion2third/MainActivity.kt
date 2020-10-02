@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         resultTextView.setText(quizViewModel.getGrade)
         trueButton.isEnabled=!quizViewModel.isAnsweredQuestion
         falseButton.isEnabled=!quizViewModel.isAnsweredQuestion
+        cheatButton.isEnabled=!quizViewModel.isCheater
         resultTextView.setText(quizViewModel.text+quizViewModel.getGrade)
         cheatToken.setText(quizViewModel.getRemainTextView+quizViewModel.getToken)
 
@@ -208,7 +209,7 @@ class MainActivity : AppCompatActivity() {
             if(quizViewModel.getToken<=1&&quizViewModel.isCheater)
            {
                quizViewModel.token-=1
-           cheatButton.isEnabled=false
+           cheatButton.isEnabled=!quizViewModel.isCheater
 
            }
             else if( quizViewModel.isCheater&&quizViewModel.getToken>=1)
